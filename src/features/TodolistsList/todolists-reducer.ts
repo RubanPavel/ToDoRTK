@@ -1,10 +1,8 @@
 import { todolistsAPI, TodolistType } from "api/todolists-api"
-import { Dispatch } from "redux"
 import { handleServerNetworkError } from "utils/error-utils"
 import { AppThunk } from "app/store"
 import { appActions, RequestStatusType } from "app/app-reducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import App from "app/App"
 
 const slice = createSlice({
   name: "todolist",
@@ -44,7 +42,13 @@ const slice = createSlice({
       }
     },
     setTodolists: (state, action: PayloadAction<{ todolists: TodolistType[] }>) => {
-      return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }))
+      //1var
+      /*return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }))*/
+
+      //2var
+      action.payload.todolists.forEach((tl) => {
+        state.push({ ...tl, filter: "all", entityStatus: "idle" })
+      })
     },
   },
 })
