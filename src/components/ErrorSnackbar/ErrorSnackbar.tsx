@@ -1,16 +1,16 @@
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { AppRootStateType } from "app/store"
 import { AlertProps, Snackbar } from "@mui/material"
 import MuiAlert from "@mui/material/Alert"
 import { appActions } from "app/app-reducer"
+import { selectError } from "app/app-selectors"
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
 export function ErrorSnackbar() {
-  const error = useSelector<AppRootStateType, string | null>((state) => state.app.error)
+  const error = useSelector(selectError)
   const dispatch = useDispatch()
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {

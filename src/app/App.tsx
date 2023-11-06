@@ -1,42 +1,34 @@
-import React, { useCallback, useEffect } from "react";
-import "./App.css";
-import { TodolistsList } from "features/TodolistsList/TodolistsList";
-import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
-import { useDispatch, useSelector } from "react-redux";
-import { AppRootStateType } from "./store";
-import { initializeAppTC, RequestStatusType } from "./app-reducer";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Login } from "features/Login/Login";
-import { logoutTC } from "features/Login/auth-reducer";
-import {
-  AppBar,
-  Button,
-  CircularProgress,
-  Container,
-  IconButton,
-  LinearProgress,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { Menu } from "@mui/icons-material";
+import React, { useCallback, useEffect } from "react"
+import "./App.css"
+import { TodolistsList } from "features/TodolistsList/TodolistsList"
+import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar"
+import { useDispatch, useSelector } from "react-redux"
+import { initializeAppTC } from "./app-reducer"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { Login } from "features/Login/Login"
+import { logoutTC } from "features/Login/auth-reducer"
+import { AppBar, Button, CircularProgress, Container, IconButton, LinearProgress, Toolbar, Typography } from "@mui/material"
+import { Menu } from "@mui/icons-material"
+import { selectIsLoggedIn } from "features/Login/auth-selectors"
+import { selectIsInitialized, selectStatus } from "app/app-selectors"
 
 type PropsType = {
-  demo?: boolean;
-};
+  demo?: boolean
+}
 
 function App({ demo = false }: PropsType) {
-  const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status);
-  const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized);
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch<any>();
+  const status = useSelector(selectStatus)
+  const isInitialized = useSelector(selectIsInitialized)
+  const isLoggedIn = useSelector(selectIsLoggedIn)
+  const dispatch = useDispatch<any>()
 
   useEffect(() => {
-    dispatch(initializeAppTC());
-  }, []);
+    dispatch(initializeAppTC())
+  }, [])
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC());
-  }, []);
+    dispatch(logoutTC())
+  }, [])
 
   if (!isInitialized) {
     return (
@@ -50,7 +42,7 @@ function App({ demo = false }: PropsType) {
       >
         <CircularProgress />
       </div>
-    );
+    )
   }
 
   return (
@@ -79,7 +71,7 @@ function App({ demo = false }: PropsType) {
         </Container>
       </div>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
