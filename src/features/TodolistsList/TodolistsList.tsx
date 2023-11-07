@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { addTodolistTC, changeTodolistTitleTC, fetchTodolistsTC, FilterValuesType, removeTodolistTC, todolistsActions } from "./todolists-reducer"
-import { removeTaskTC, tasksThunks } from "./tasks-reducer"
+import { addTodolistTC, changeTodolistTitleTC, FilterValuesType, todolistsActions, todolistThunks } from "./todolists-reducer"
+import { tasksThunks } from "./tasks-reducer"
 import { TaskStatuses } from "api/todolists-api"
 import { Grid, Paper } from "@mui/material"
 import { AddItemForm } from "components/AddItemForm/AddItemForm"
@@ -26,12 +26,11 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     if (demo || !isLoggedIn) {
       return
     }
-    const thunk = fetchTodolistsTC()
-    dispatch(thunk)
+    dispatch(todolistThunks.fetchTodolists)
   }, [])
 
   const removeTask = useCallback(function (id: string, todolistId: string) {
-    const thunk = removeTaskTC(id, todolistId)
+    const thunk = tasksThunks.removeTask({ taskId: id, todolistId })
     dispatch(thunk)
   }, [])
 
@@ -52,8 +51,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
   }, [])
 
   const removeTodolist = useCallback(function (id: string) {
-    const thunk = removeTodolistTC(id)
-    dispatch(thunk)
+    dispatch(todolistThunks.removeTodolist(id))
   }, [])
 
   const changeTodolistTitle = useCallback(function (id: string, title: string) {
