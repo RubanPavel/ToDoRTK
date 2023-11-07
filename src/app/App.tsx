@@ -1,48 +1,48 @@
-import React, { useCallback, useEffect } from "react"
-import "./App.css"
-import { TodolistsList } from "features/TodolistsList/TodolistsList"
-import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar"
-import { useDispatch, useSelector } from "react-redux"
-import { initializeAppTC } from "./app-reducer"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { Login } from "features/Login/Login"
-import { logoutTC } from "features/Login/auth-reducer"
-import { AppBar, Button, CircularProgress, Container, IconButton, LinearProgress, Toolbar, Typography } from "@mui/material"
-import { Menu } from "@mui/icons-material"
-import { selectIsLoggedIn } from "features/Login/auth-selectors"
-import { selectIsInitialized, selectStatus } from "app/app-selectors"
+import React, { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  AppBar,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  LinearProgress,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { Menu } from "@mui/icons-material";
+import { initializeAppTC } from "app/app.reducer";
+import { Login } from "features/auth/Login";
+import { logoutTC } from "features/auth/auth.reducer";
+import "./App.css";
+import { TodolistsList } from "features/TodolistsList/TodolistsList";
+import { ErrorSnackbar } from "common/components";
+import { useAppDispatch } from "common/hooks";
+import { selectIsLoggedIn } from "features/auth/auth.selectors";
+import { selectAppStatus, selectIsInitialized } from "app/app.selectors";
 
-type PropsType = {
-  demo?: boolean
-}
+function App() {
+  const status = useSelector(selectAppStatus);
+  const isInitialized = useSelector(selectIsInitialized);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
-function App({ demo = false }: PropsType) {
-  const status = useSelector(selectStatus)
-  const isInitialized = useSelector(selectIsInitialized)
-  const isLoggedIn = useSelector(selectIsLoggedIn)
-  const dispatch = useDispatch<any>()
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(initializeAppTC())
-  }, [])
+    dispatch(initializeAppTC());
+  }, []);
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC())
-  }, [])
+    dispatch(logoutTC());
+  }, []);
 
   if (!isInitialized) {
     return (
-      <div
-        style={{
-          position: "fixed",
-          top: "30%",
-          textAlign: "center",
-          width: "100%",
-        }}
-      >
+      <div style={{ position: "fixed", top: "30%", textAlign: "center", width: "100%" }}>
         <CircularProgress />
       </div>
-    )
+    );
   }
 
   return (
@@ -65,13 +65,13 @@ function App({ demo = false }: PropsType) {
         </AppBar>
         <Container fixed>
           <Routes>
-            <Route path={"/"} element={<TodolistsList demo={demo} />} />
+            <Route path={"/"} element={<TodolistsList />} />
             <Route path={"/login"} element={<Login />} />
           </Routes>
         </Container>
       </div>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
